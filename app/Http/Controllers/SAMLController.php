@@ -13,7 +13,6 @@ class SAMLController extends Controller
 
 	public function logout()
 	{
-		//return redirect('saml2/logout');
 		\Auth::logout();
 		return redirect('/');
 	}

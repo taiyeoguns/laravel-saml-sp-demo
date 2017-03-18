@@ -1,40 +1,68 @@
-<p align="center"><img src="https://laravel.com/assets/img/components/logo-laravel.svg"></p>
+# Laravel SAML SP Demo
 
-<p align="center">
-<a href="https://travis-ci.org/laravel/framework"><img src="https://travis-ci.org/laravel/framework.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/d/total.svg" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/v/stable.svg" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/license.svg" alt="License"></a>
-</p>
+Demo - [https://laravel-saml-sp-demo.herokuapp.com](https://laravel-saml-sp-demo.herokuapp.com)
 
-## About Laravel
+## Overview
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable, creative experience to be truly fulfilling. Laravel attempts to take the pain out of development by easing common tasks used in the majority of web projects, such as:
+Laravel 5.4 application showing implementation of SAML authentication as a Service Provider.
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+This demo uses the [aacotroneo/laravel-saml2](https://github.com/aacotroneo/laravel-saml2) package and [SSOCircle](http://www.ssocircle.com) as Identity Provider.
 
-Laravel is accessible, yet powerful, providing tools needed for large, robust applications. A superb combination of simplicity, elegance, and innovation give you tools you need to build any application with which you are tasked.
 
-## Learning Laravel
+## Installation
 
-Laravel has the most extensive and thorough documentation and video tutorial library of any modern web application framework. The [Laravel documentation](https://laravel.com/docs) is thorough, complete, and makes it a breeze to get started learning the framework.
+Clone Project
 
-If you're not in the mood to read, [Laracasts](https://laracasts.com) contains over 900 video tutorials on a range of topics including Laravel, modern PHP, unit testing, JavaScript, and more. Boost the skill level of yourself and your entire team by digging into our comprehensive video library.
+```sh
+git clone https://github.com/taiyeoguns/laravel-saml-sp-demo.git laravelsamlspdemo
+```
 
-## Contributing
+Install Composer dependencies
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](http://laravel.com/docs/contributions).
+```sh
+cd laravelsamlspdemo
+composer install
+```
 
-## Security Vulnerabilities
+Maintain database details in `.env` file
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell at taylor@laravel.com. All security vulnerabilities will be promptly addressed.
+```sh
+cp .env.example .env
+```
 
-## License
+Migrate tables
 
-The Laravel framework is open-sourced software licensed under the [MIT license](http://opensource.org/licenses/MIT).
+```sh
+php artisan migrate
+```
+
+Start server
+
+```sh
+php artisan serve
+```
+
+
+## IdP Setup
+
+- Login to [SSOCircle](http://www.ssocircle.com) or create an account.
+- Click on `Manage Metadata` and select `Add new Service Provider`.
+- For `FQDN`, enter:
+<br />`http://localhost:8000`
+- Select all Assertion attributes, `FirstName`, `LastName`, `EmailAddress`
+- In the Laravel application, browse to: `http://localhost:8000/saml2/metadata` and copy the xml
+- Back in SSOCircle metadata, paste the copied xml in `Insert your metadata information`
+- Click `Submit` to save metadata.
+
+
+## Test
+
+- Browse to `http://localhost:8000`
+- Click on `Login` link.
+- You will be forwarded to the SSOCircle. After successful authentication at the IdP, it will redirect to the Laravel application and user will be logged in.
+
+
+## Further Information
+
+- [SAML Overview](https://github.com/jch/saml)
+- [SSO Circle IdP details](https://idp.ssocircle.com)
