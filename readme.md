@@ -36,10 +36,10 @@ Migrate tables
 php artisan migrate
 ```
 
-Start server
+Generate app key and start server
 
 ```sh
-php artisan serve
+php artisan key:generate && php artisan serve
 ```
 
 
