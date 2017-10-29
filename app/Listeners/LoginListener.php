@@ -30,9 +30,11 @@ class LoginListener
 		$userData = [
 			'id' => $user->getUserId(),
 			'attributes' => $user->getAttributes(),
-			'assertion' => $user->getRawSamlAssertion()
-		];
-		
+            'assertion' => $user->getRawSamlAssertion(),
+            'sessionIndex' => $user->getSessionIndex(),
+            'nameId' => $user->getNameId()
+        ];
+        
 		//check if email already exists and fetch user
 		$user = \App\User::where('email', $userData['attributes']['EmailAddress'][0])->first();
 		
@@ -45,7 +47,11 @@ class LoginListener
 			$user->password = bcrypt(str_random(8));
 			$user->save();
 		}
-		
+        
+        //insert sessionIndex and nameId into session
+        session(['sessionIndex' => $userData['sessionIndex']]);
+        session(['nameId' => $userData['nameId']]);
+
 		//login user
 		\Auth::login($user);
     }
